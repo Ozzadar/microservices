@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"log"
 
 	"gopkg.in/mgo.v2"
 
@@ -27,7 +26,6 @@ func (s *service) FindAvailable(ctx context.Context, req *pb.Specification, res 
 		return err
 	}
 
-	log.Printf("Vessel: %v", vessel)
 	res.Vessel = vessel
 	return nil
 }
@@ -39,6 +37,7 @@ func (s *service) Create(ctx context.Context, req *pb.Vessel, res *pb.Response) 
 		return err
 	}
 	res.Vessel = req
+
 	res.Created = true
 	return nil
 }
