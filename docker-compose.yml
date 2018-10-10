@@ -1,7 +1,10 @@
 version: '3.1'
 
 services:
-
+  user-cli:
+    build: ./user-cli
+    network_mode: "host"
+    
   consignment-cli:
     build: ./consignment-cli
     network_mode: "host"
@@ -22,8 +25,27 @@ services:
     environment:
       MICRO_ADDRESS: ":50051"
 
+  user-service:
+    build: ./user-service
+    network_mode: "host"
+    ports:
+      - 50053:50051
+    environment:
+      MICRO_ADDRESS: ":5001"
+      DB_NAME: "postgres"
+      DB_HOST: "127.0.0.1"
+      DB_PORT: "5432"
+      DB_USER: "postgres"
+      DB_PASSWORD: "postgres"
+
   datastore:
     image: mongo
     network_mode: "host"
     ports:
       - 27017:27017
+
+  database:
+    image: postgres
+    ports:
+      - 5432:5432
+    network_mode: "host"
