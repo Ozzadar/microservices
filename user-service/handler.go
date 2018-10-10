@@ -1,13 +1,16 @@
 package main
 
 import (
+	"log"
+
 	pb "github.com/ozzadar/microservices/user-service/proto/user"
+	"golang.org/x/crypto/bcrypt"
 	"golang.org/x/net/context"
 )
 
 type service struct {
-	repo Repository
-	//tokenService Authable
+	repo         Repository
+	tokenService Authable
 }
 
 func (srv *service) Get(ctx context.Context, req *pb.User, res *pb.Response) error {
@@ -34,17 +37,39 @@ func (srv *service) GetAll(ctx context.Context, req *pb.Request, res *pb.Respons
 }
 
 func (srv *service) Auth(ctx context.Context, req *pb.User, res *pb.Token) error {
-	_, err := srv.repo.GetByEmailAndPassword(req)
+	log.Println("Logging in with: ", req.Email, req.Password)
+
+	user, err := srv.repo.GetByEmail(req.Email)
+
+	log.Println(user, err)
+	if err != nil {
+		return err
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
+		return err
+	}
+
+	token, err := srv.tokenService.Encode(user)
 
 	if err != nil {
 		return err
 	}
 
-	res.Token = "testingabc"
+	res.Token = token
 	return nil
 }
 
 func (srv *service) Create(ctx context.Context, req *pb.User, res *pb.Response) error {
+	// Generates hashed version of our password
+
+	hashedPass, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+
+	req.Password = string(hashedPass)
+
 	if err := srv.repo.Create(req); err != nil {
 		return err
 	}

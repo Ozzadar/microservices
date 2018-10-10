@@ -40,11 +40,12 @@ func main() {
 
 	service.Init(
 		micro.Action(func(c *cli.Context) {
-			name := c.String("name")
-			email := c.String("email")
-			password := c.String("password")
-			company := c.String("company")
+			name := "Paul"
+			email := "things@stuff"
+			password := "mypassword"
+			company := "mauVILLE Technologies"
 
+			log.Printf("%v", c)
 			// Call our user service
 
 			r, err := client.Create(context.TODO(), &pb.User{
@@ -54,6 +55,7 @@ func main() {
 				Company:  company,
 			})
 
+			log.Printf("%s, %s, %s, %s", name, email, password, company)
 			if err != nil {
 				log.Fatalf("Could not create: %v", err)
 			}
@@ -68,6 +70,17 @@ func main() {
 			for _, v := range getAll.Users {
 				log.Println(v)
 			}
+
+			authResponse, err := client.Auth(context.TODO(), &pb.User{
+				Email:    email,
+				Password: password,
+			})
+
+			if err != nil {
+				log.Fatalf("Could not authenticate user: %s error: %v\n", email, err)
+			}
+
+			log.Printf("Your access Token is: %s \n", authResponse.Token)
 
 			os.Exit(0)
 		}),

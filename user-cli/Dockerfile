@@ -17,4 +17,4 @@ WORKDIR /app
 
 COPY --from=builder /go/src/github.com/ozzadar/microservices/user-cli/user-cli .
 
-CMD ["./user-cli"]
+CMD ./user-cli
