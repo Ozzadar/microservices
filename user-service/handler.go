@@ -82,6 +82,7 @@ func (srv *service) Create(ctx context.Context, req *pb.User, res *pb.Response) 
 
 	res.User = req
 
+	log.Printf("Publishing message: %v", req)
 	if err := srv.Publisher.Publish(ctx, req); err != nil {
 		return err
 	}

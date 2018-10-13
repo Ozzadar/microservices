@@ -8,14 +8,14 @@ import (
 	"github.com/micro/go-micro"
 	microclient "github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/cmd"
-	pb "github.com/ozzadar/microservices/user-service/proto/user"
+	pb "github.com/ozzadar/microservices/user-service/proto/auth"
 	"golang.org/x/net/context"
 )
 
 func main() {
 	cmd.Init()
 
-	client := pb.NewUserServiceClient("go.micro.srv.user", microclient.DefaultClient)
+	client := pb.NewAuthClient("shippy.auth", microclient.DefaultClient)
 
 	service := micro.NewService(
 		micro.Flags(

@@ -16,7 +16,7 @@ import (
 	micro "github.com/micro/go-micro"
 	"github.com/micro/go-micro/server"
 	pb "github.com/ozzadar/microservices/consignment-service/proto/consignment"
-	userService "github.com/ozzadar/microservices/user-service/proto/user"
+	userService "github.com/ozzadar/microservices/user-service/proto/auth"
 	vesselProto "github.com/ozzadar/microservices/vessel-service/proto/vessel"
 )
 
@@ -39,12 +39,12 @@ func main() {
 	}
 
 	srv := micro.NewService(
-		micro.Name("go.micro.srv.consignment"),
+		micro.Name("shippy.consignment"),
 		micro.Version("latest"),
 		micro.WrapHandler(AuthWrapper),
 	)
 
-	vesselClient := vesselProto.NewVesselServiceClient("go.micro.srv.vessel", srv.Client())
+	vesselClient := vesselProto.NewVesselServiceClient("shippy.vessel", srv.Client())
 	// Init will parse the command line flags
 	srv.Init()
 
@@ -70,7 +70,7 @@ func AuthWrapper(fn server.HandlerFunc) server.HandlerFunc {
 		log.Println("Authenticating with token: ", token)
 
 		// Auth here
-		authClient := userService.NewUserServiceClient("go.micro.srv.user", client.DefaultClient)
+		authClient := userService.NewAuthClient("go.micro.srv.user", client.DefaultClient)
 
 		_, err := authClient.ValidateToken(context.Background(), &userService.Token{
 			Token: token,
