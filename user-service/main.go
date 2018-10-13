@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	micro "github.com/micro/go-micro"
-	_ "github.com/micro/go-plugins/broker/nats"
-	pb "github.com/ozzadar/microservices/user-service/proto/user"
+	"github.com/micro/go-micro"
+	pb "github.com/ozzadar/microservices/user-service/proto/auth"
 )
 
 func main() {
@@ -27,15 +26,15 @@ func main() {
 	tokenService := &TokenService{repo}
 
 	srv := micro.NewService(
-		micro.Name("go.micro.srv.user"),
+		micro.Name("shippy.auth"),
 		micro.Version("latest"),
 	)
 
 	srv.Init()
 
-	pubsub := srv.Server().Options().Broker
+	publisher := micro.NewPublisher("user.created", srv.Client())
 
-	pb.RegisterUserServiceHandler(srv.Server(), &service{repo, tokenService, pubsub})
+	pb.RegisterAuthHandler(srv.Server(), &service{repo, tokenService, publisher})
 
 	if err := srv.Run(); err != nil {
 		fmt.Println(err)

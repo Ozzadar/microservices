@@ -1,5 +1,5 @@
 build:
-	protoc -I. --go_out=plugins=micro:$(GOPATH)/src/github.com/ozzadar/microservices/user-service proto/user/user.proto
+	protoc -I. --go_out=plugins=micro:$(GOPATH)/src/github.com/ozzadar/microservices/user-service proto/auth/auth.proto
 	sudo docker build -t user-service .
 
 run:

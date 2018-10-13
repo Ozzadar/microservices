@@ -32,8 +32,6 @@ services:
       - 50053:50051
     environment:
       MICRO_ADDRESS: ":5001"
-      MICRO_BROKER: "nats"
-      MICRO_BROKEN_ADDRESS: "127.0.0.1:4222"
       DB_NAME: "postgres"
       DB_HOST: "127.0.0.1"
       DB_PORT: "5432"
@@ -47,8 +45,6 @@ services:
       - 50054:50051
     environment:
       MICRO_ADDRESS: ":5001"
-      MICRO_BROKER: "nats"
-      MICRO_BROKEN_ADDRESS: "127.0.0.1:4222"
 
   datastore:
     image: mongo

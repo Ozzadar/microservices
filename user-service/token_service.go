@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	pb "github.com/ozzadar/microservices/user-service/proto/user"
+	pb "github.com/ozzadar/microservices/user-service/proto/auth"
 )
 
 var (

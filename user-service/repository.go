@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/jinzhu/gorm"
-	pb "github.com/ozzadar/microservices/user-service/proto/user"
+	pb "github.com/ozzadar/microservices/user-service/proto/auth"
 )
 
 type Repository interface {
