@@ -80,7 +80,7 @@ func main() {
 
 	log.Printf("Created: %t", r.Created)
 
-	getAll, err := client.GetConsignments(context.Background(), &pb.GetRequest{})
+	getAll, err := client.GetConsignments(ctx, &pb.GetRequest{})
 
 	if err != nil {
 		log.Fatalf("Could not list consignments: %v", err)

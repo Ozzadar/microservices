@@ -5,6 +5,7 @@ import (
 	"log"
 
 	micro "github.com/micro/go-micro"
+	_ "github.com/micro/go-plugins/broker/nats"
 	pb "github.com/ozzadar/microservices/user-service/proto/user"
 )
 
@@ -32,7 +33,9 @@ func main() {
 
 	srv.Init()
 
-	pb.RegisterUserServiceHandler(srv.Server(), &service{repo, tokenService})
+	pubsub := srv.Server().Options().Broker
+
+	pb.RegisterUserServiceHandler(srv.Server(), &service{repo, tokenService, pubsub})
 
 	if err := srv.Run(); err != nil {
 		fmt.Println(err)

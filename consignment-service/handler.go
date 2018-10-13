@@ -28,11 +28,12 @@ func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment, re
 		Capacity:  int32(len(req.Containers)),
 	})
 
-	log.Printf("Found vessel: %s \n", vesselResponse.Vessel.Name)
-
 	if err != nil {
+		log.Printf("Error talking to vessel service: %v\n", err)
 		return err
 	}
+
+	log.Printf("Found vessel: %s \n", vesselResponse.Vessel.Name)
 
 	req.VesselId = vesselResponse.Vessel.Id
 
