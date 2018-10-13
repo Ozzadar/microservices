@@ -36,8 +36,31 @@ Run the services:
     docker-compose up
 ```
 
-Run just the cli afterwards:
+___
 
+## Reference commands:
+
+Running micro-api docker container: 
+
+```bash
+sudo docker run --network host -p 8080:8080 microhq/micro api --handler=rpc --address=:8080 --namespace=shippy
 ```
-    docker-compose run consignment-cli
+Create User:
+
+```bash
+curl -XPOST -H 'Content-Type: application/json' curl -XPOST -H 'Content-Type: application/json' -d '{ "service": "shippy.auth", "method": "Auth.Create", "request":  { "name": "Paul Mauviel", "company": "mauVILLE Technologies", "email": "your@email.com", "password": "SomePass" } }' http://localhost:8080/rpc
+```
+
+Curl command to create consignment:
+
+```bash
+curl -XPOST -H 'Content-Type: application/json' -H 'Token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyIjp7ImlkIjoiNGE4YTk0MTYtY2FlZS00NTczLWFjNGEtMzA0MmE3MGMxMmI2IiwibmFtZSI6IlBhdWwgTWF1dmllbCIsImNvbXBhbnkiOiJtYXVWSUxMRSBUZWNobm9sb2dpZXMiLCJlbWFpbCI6InlvdXJAZW1haWwuY29tIiwicGFzc3dvcmQiOiIkMmEkMTAkT0llOE5Ucm5uMHdUUDZZREVDYUtHdUFZbno0US56U1guUnRGbU5ZSXFBOGF3cjNZVXBZdHUifSwiZXhwIjoxNTM5NjY5MzIzLCJpc3MiOiJtaWNyb3NlcnZpY2VzLnVzZXIifQ.F7d1vgAWsr7NqPjYEtoZF7KR-8Q8xEdfF_LyFVWZX0w' -d '{
+      "service": "shippy.consignment",
+      "method": "ShippingService.CreateConsignment",
+      "request": {
+        "description": "This is a test",
+        "weight": 500,
+        "containers": []
+      }
+    }' --url http://localhost:8080/rpc
 ```

@@ -16,6 +16,7 @@ services:
       - 50051:50051
     environment:
       MICRO_ADDRESS: ":50051"
+      DISABLE_AUTH: "false"
 
   vessel-service:
     build: ./vessel-service

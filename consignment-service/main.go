@@ -60,7 +60,15 @@ func main() {
 
 func AuthWrapper(fn server.HandlerFunc) server.HandlerFunc {
 	return func(ctx context.Context, req server.Request, resp interface{}) error {
+
 		meta, ok := metadata.FromContext(ctx)
+
+		log.Printf("%v", meta)
+
+		if os.Getenv("DISABLE_AUTH") == "true" {
+			return fn(ctx, req, resp)
+		}
+
 		if !ok {
 			return errors.New("no auth meta-data found in request")
 		}
@@ -70,7 +78,7 @@ func AuthWrapper(fn server.HandlerFunc) server.HandlerFunc {
 		log.Println("Authenticating with token: ", token)
 
 		// Auth here
-		authClient := userService.NewAuthClient("go.micro.srv.user", client.DefaultClient)
+		authClient := userService.NewAuthClient("shippy.auth", client.DefaultClient)
 
 		_, err := authClient.ValidateToken(context.Background(), &userService.Token{
 			Token: token,
